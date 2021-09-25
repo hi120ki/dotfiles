@@ -168,6 +168,7 @@ alias dcso 'docker-compose stop'
 alias dcrm 'docker-compose rm -f'
 alias dcps 'docker-compose ps'
 alias dcex 'docker-compose exec'
+alias dockercleanall 'bash -c "docker stop \$(docker ps -q) ; docker rm \$(docker ps -q -a) ; docker rmi \$(docker images -q) ; docker network prune -f ; docker volume prune -f"'
 
 # Vagrant
 alias v 'vagrant'
