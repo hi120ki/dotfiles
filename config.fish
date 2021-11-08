@@ -38,9 +38,9 @@ if command -sq exa
   alias la 'exa -lag --octal-permissions --time-style long-iso --icons'
   function lt
     if count $argv > /dev/null
-      exa -lT --git --git-ignore --icons --time-style=long-iso -L=$argv
+      exa -lT --git --git-ignore --octal-permissions --time-style=long-iso --icons -L=$argv
     else
-      exa -lT --git --git-ignore --icons --time-style=long-iso -L=2
+      exa -lT --git --git-ignore --octal-permissions --time-style=long-iso --icons -L=2
     end
   end
 else
@@ -126,14 +126,23 @@ alias rmr 'rm -rf'
 alias cl 'clear'
 alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
-alias ghidra '~/ghidra/10.0/ghidraRun'
+alias ghidra '~/ghidra/10.0.4/ghidraRun'
 alias sha256 'shasum -a 256'
 
 # Python
-alias venv 'source venv/bin/activate.fish'
-alias venvinit 'rm -rf venv ; python -m venv venv'
 alias pipinit 'pip install -U pip ; pip install -U pipdeptree black pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit pwntools'
 alias pipreq 'pip install -r requirements.txt'
+alias venv 'source venv/bin/activate.fish'
+alias venvinit 'rm -rf venv ; python -m venv venv'
+alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
+# pipx
+# sudo apt install -y libffi-dev libbz2-dev libreadline-dev libsqlite3-dev
+# pyenv install 3.8.12 ; pyenv global 3.8.12
+# pip install -U pipx
+# ~/.local/bin/pipx ensurepath
+# pipx install online-judge-tools ; pipx install black ; pipx install isort ; pipx install jupyterlab ; pipx install ansible --include-deps ; pipx install ansible-lint ; pipx inject ansible-lint ansible
+# pipx upgrade-all
+# pipx list
 
 # Node.js
 alias nup 'npm i -g npm yarn ; npm update -g ; yarn global upgrade ; npm cache verify ; yarn cache clean'
@@ -158,6 +167,7 @@ alias dex 'docker exec -it'
 alias di 'docker images | sort -k6 -h'
 alias dip 'docker image prune -f'
 alias dvp 'docker volume prune -f'
+alias dockercleanall 'bash -c "docker ps --format "{{.Names}}" | xargs docker stop ; docker ps -a --format "{{.Names}}" | xargs docker rm ; docker images --format "{{.Repository}}:{{.Tag}}" | xargs docker rmi ; docker network prune -f ; docker volume prune -f ; docker builder prune -f ; docker system prune -f"'
 
 # Docker Compose
 alias dc 'docker-compose'
@@ -168,7 +178,6 @@ alias dcso 'docker-compose stop'
 alias dcrm 'docker-compose rm -f'
 alias dcps 'docker-compose ps'
 alias dcex 'docker-compose exec'
-alias dockercleanall 'bash -c "docker stop \$(docker ps -q) ; docker rm \$(docker ps -q -a) ; docker rmi \$(docker images -q) ; docker network prune -f ; docker volume prune -f"'
 
 # Vagrant
 alias v 'vagrant'
