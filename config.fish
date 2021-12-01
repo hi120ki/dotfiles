@@ -145,6 +145,7 @@ alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
 # pipx list
 
 # Node.js
+# yarn global add npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
 alias nup 'npm i -g npm yarn ; npm update -g ; yarn global upgrade ; npm cache verify ; yarn cache clean'
 
 # Git
