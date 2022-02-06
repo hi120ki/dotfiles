@@ -189,6 +189,12 @@ alias vdest 'vagrant destroy -f'
 alias vhalt 'vagrant halt'
 alias vrelo 'vagrant reload'
 
+# Vbox
+alias vb 'vboxmanage'
+alias vbs 'vboxmanage list runningvms'
+alias vbsa 'vboxmanage list vms'
+alias vbc 'VBoxManage list vms | grep inaccessible | cut -d "{" -f2 | cut -d "}" -f1 | xargs -L1 VBoxManage unregistervm'
+
 # ======================================================================== #
 # OS command
 # ======================================================================== #
