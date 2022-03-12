@@ -126,7 +126,7 @@ alias rmr 'rm -rf'
 alias cl 'clear'
 alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
-alias ghidra '~/ghidra/10.0.4/ghidraRun'
+alias ghidra '~/ghidra/10.1.2/ghidraRun'
 alias sha256 'shasum -a 256'
 
 # Python
@@ -168,7 +168,7 @@ alias dex 'docker exec -it'
 alias di 'docker images | sort -k6 -h'
 alias dip 'docker image prune -f'
 alias dvp 'docker volume prune -f'
-alias dockercleanall 'bash -c "docker ps --format "{{.Names}}" | xargs docker stop ; docker ps -a --format "{{.Names}}" | xargs docker rm ; docker images --format "{{.Repository}}:{{.Tag}}" | xargs docker rmi ; docker network prune -f ; docker volume prune -f ; docker builder prune -f ; docker system prune -f"'
+alias dockercleanall 'docker ps --format "{{.Names}}" | xargs docker stop ; docker ps -a --format "{{.Names}}" | xargs docker rm ; docker images --format "{{.Repository}}:{{.Tag}}" | xargs docker rmi ; docker network prune -f ; docker volume prune -f ; docker builder prune -f ; docker system prune -f'
 
 # Docker Compose
 alias dc 'docker-compose'
@@ -214,9 +214,12 @@ end
 # Path
 # ======================================================================== #
 
+# anyenv
 set -x PATH ~/.anyenv/bin $PATH
 anyenv init - | source
-set -x PATH ~/.pyenv/bin $PATH
-pyenv init --path | source
 
+# rust
 set -x PATH ~/.cargo/bin $PATH
+
+# pipx
+# set PATH $PATH ~/.local/bin
