@@ -120,7 +120,7 @@ alias de 'cd ~/Desktop'
 alias dl 'cd ~/Downloads'
 alias do 'cd ~/Documents'
 alias pj 'cd ~/Project'
-alias vg 'cd ~/Vagrant'
+alias gh 'cd ~/src/github.com/hi120ki'
 
 alias rmr 'rm -rf'
 alias cl 'clear'
