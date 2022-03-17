@@ -10,6 +10,7 @@ function ssidChanged()
     else
         wifiMenu:setTitle("Wi-Fi OFF")
     end
+    ping()
 end
 
 wifiWatcher = hs.wifi.watcher.new(ssidChanged):start()
