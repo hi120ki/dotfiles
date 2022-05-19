@@ -78,6 +78,7 @@ if command -sq fd
 end
 
 # https://github.com/junegunn/fzf
+# $ brew install fzf ; /usr/local/opt/fzf/install
 if command -sq fzf
   set -Ux FZF_CTRL_T_COMMAND 'fd --type f --hidden --follow --exclude .git'
   set -Ux FZF_CTRL_T_OPTS '--preview "bat --color=always --style=header,grid --line-range :100 {}"'
@@ -227,3 +228,9 @@ set -x PATH ~/.cargo/bin $PATH
 
 # pipx
 # set PATH $PATH ~/.local/bin
+
+# zellij
+# if set -q ZELLIJ
+# else
+#   zellij
+# end
