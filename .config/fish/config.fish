@@ -229,8 +229,3 @@ set -x PATH ~/.cargo/bin $PATH
 # pipx
 # set PATH $PATH ~/.local/bin
 
-# zellij
-# if set -q ZELLIJ
-# else
-#   zellij
-# end
