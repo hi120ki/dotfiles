@@ -16,6 +16,12 @@ set -g theme_nerd_fonts yes
 set -g theme_display_date no
 set -g theme_color_scheme dracula
 
+if test -d /opt/homebrew/bin
+  if status is-interactive
+    eval (/opt/homebrew/bin/brew shellenv)
+  end
+end
+
 # ======================================================================== #
 # Customized command
 # ======================================================================== #
@@ -66,14 +72,14 @@ end
 if command -sq fd
   alias f 'fd'
   alias rmds 'fd -IH ".DS_Store" | xargs rm'
-  alias cleanc 'fd ".*.c" | xargs clang-format -style=Google -i'
-  alias cleanmd 'fd ".*.md" | xargs prettier --write'
-  alias cleanjson 'fd ".*.json" | xargs prettier --write'
-  alias cleanyml 'fd ".*.yml" | xargs prettier --write'
+  alias cleanc 'fd -e c | xargs clang-format -style=Google -i'
+  alias cleanmd 'fd -e md | xargs prettier --write'
+  alias cleanjson 'fd -e json | xargs prettier --write'
+  alias cleanyml 'fd -e yml -e yaml | xargs prettier --write'
+  alias cleanpy 'fd -e py | xargs black'
+  alias cleansh 'fd -e sh | xargs shfmt -i 2 -w'
   alias cleancss 'fd ".*.css" -E ".*min.css" | xargs prettier --write'
   alias cleanjs 'fd ".*.js" -E ".*min.js" | xargs prettier --write'
-  alias cleanpy 'fd ".*.py" | xargs black'
-  alias cleansh 'fd ".*.sh" | xargs shfmt -i 2 -w'
   alias cleanhtml 'fd ".*.html" -E ".*min.html" | xargs js-beautify -I -r -n -s 2 --no-preserve-newlines'
 end
 
@@ -131,15 +137,16 @@ alias rmr 'rm -rf'
 alias cl 'clear'
 alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
-alias ghidra '~/ghidra/10.1.2/ghidraRun'
+alias ghidra '~/ghidra/10.1.5/ghidraRun'
 alias sha256 'shasum -a 256'
 
 # Python
-alias pipinit 'pip install -U pip ; pip install -U pipdeptree black pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit pwntools'
+alias pipinit 'pip install -U pip ; pip install -U pipdeptree black pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit'
 alias pipreq 'pip install -r requirements.txt'
 alias venv 'source venv/bin/activate.fish'
 alias venvinit 'rm -rf venv ; python -m venv venv'
 alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
+
 # pipx
 # sudo apt install -y libffi-dev libbz2-dev libreadline-dev libsqlite3-dev
 # pyenv install 3.8.12 ; pyenv global 3.8.12
@@ -150,7 +157,7 @@ alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
 # pipx list
 
 # Node.js
-# yarn global add npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
+# npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
 alias nup 'npm i -g npm yarn ; npm update -g ; yarn global upgrade ; npm cache verify ; yarn cache clean'
 
 # Git
@@ -220,12 +227,12 @@ end
 # ======================================================================== #
 
 # anyenv
-set -x PATH ~/.anyenv/bin $PATH
-anyenv init - | source
+if test -d ~/.anyenv
+  set -x PATH ~/.anyenv/bin $PATH
+  anyenv init - | source
+end
 
 # rust
-set -x PATH ~/.cargo/bin $PATH
-
-# pipx
-# set PATH $PATH ~/.local/bin
-
+if test -d ~/.cargo
+  set -x PATH ~/.cargo/bin $PATH
+end
