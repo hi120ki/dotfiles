@@ -236,3 +236,8 @@ end
 if test -d ~/.cargo
   set -x PATH ~/.cargo/bin $PATH
 end
+
+# devbox
+if command -sq devbox
+  devbox completion fish | source
+end
