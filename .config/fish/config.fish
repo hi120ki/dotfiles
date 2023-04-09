@@ -72,14 +72,15 @@ end
 if command -sq fd
   alias f 'fd'
   alias rmds 'fd -IH ".DS_Store" | xargs rm'
-  alias cleanc 'fd -e c | xargs clang-format -style=Google -i'
-  alias cleanmd 'fd -e md | xargs prettier --write'
-  alias cleanjson 'fd -e json | xargs prettier --write'
-  alias cleanyml 'fd -e yml -e yaml | xargs prettier --write'
-  alias cleanpy 'fd -e py | xargs black'
-  alias cleansh 'fd -e sh | xargs shfmt -i 2 -w'
-  alias cleancss 'fd ".*.css" -E ".*min.css" | xargs prettier --write'
-  alias cleanjs 'fd ".*.js" -E ".*min.js" | xargs prettier --write'
+  alias cleanc 'fd -e c -e h -e cpp -x clang-format -i'
+  alias cleanmd 'fd -e md -x xargs prettier --write'
+  alias cleanjson 'fd -e json -x prettier --no-config -w'
+  alias cleanyml 'fd -e yml -e yaml -x prettier --no-config -w'
+  alias cleanpy 'black .'
+  alias cleansh 'fd -e sh -x xargs shfmt -i 2 -w'
+  alias cleancss "fd -e css -E '*min.css' -x prettier --no-config -w"
+  alias cleanjs "fd -e js -E '*min.js' -x prettier --no-config -w"
+  alias cleants 'fd -e ts -e tsx | xargs prettier --write'
   alias cleanhtml 'fd ".*.html" -E ".*min.html" | xargs js-beautify -I -r -n -s 2 --no-preserve-newlines'
 end
 
@@ -104,7 +105,7 @@ if command -sq fzf
   # brew install the_silver_searcher
   # sudo apt-get install silversearcher-ag
   function fssh -d "Fuzzy-find ssh host via ag and ssh into it"
-    ag --ignore-case '^host [^*]' ~/.ssh/config | cut -d ' ' -f 2 | fzf --border --reverse | read -l result; and ssh "$result"
+    ag --ignore-case '^host [^*]' ~/.ssh/config* | cut -d ' ' -f 2 | fzf --border --reverse | read -l result; and ssh "$result"
   end
 end
 
@@ -137,19 +138,19 @@ alias rmr 'rm -rf'
 alias cl 'clear'
 alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
-alias ghidra '~/ghidra/10.1.5/ghidraRun'
+alias ghidra '~/ghidra/10.2.3/ghidraRun'
 alias sha256 'shasum -a 256'
 
 # Python
 alias pipinit 'pip install -U pip ; pip install -U pipdeptree black pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit'
 alias pipreq 'pip install -r requirements.txt'
-alias venv 'source venv/bin/activate.fish'
-alias venvinit 'rm -rf venv ; python -m venv venv'
+alias venv 'source .venv/bin/activate.fish'
+alias venvinit 'rm -rf .venv ; python -m venv .venv'
 alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
 
 # pipx
 # sudo apt install -y libffi-dev libbz2-dev libreadline-dev libsqlite3-dev
-# pyenv install 3.8.12 ; pyenv global 3.8.12
+# pyenv install 3.10.10 ; pyenv global 3.10.10
 # pip install -U pipx
 # ~/.local/bin/pipx ensurepath
 # pipx install online-judge-tools ; pipx install black ; pipx install isort ; pipx install jupyterlab ; pipx install ansible --include-deps ; pipx install ansible-lint ; pipx inject ansible-lint ansible
@@ -184,7 +185,7 @@ alias dockercleanall 'docker ps --format "{{.Names}}" | xargs docker stop ; dock
 
 # Docker Compose
 alias dc 'docker-compose'
-alias dcb 'docker-compose build'
+alias dcb 'docker-compose pull ; docker-compose build --pull'
 alias dcu 'docker-compose up'
 alias dcup 'docker-compose up -d'
 alias dcso 'docker-compose stop'
@@ -215,6 +216,7 @@ alias vbc 'VBoxManage list vms | grep inaccessible | cut -d "{" -f2 | cut -d "}"
 if command -sq sw_vers
   alias up 'brew upgrade ; brew upgrade --cask ; anyenv update'
   alias xcodeselect 'sudo rm -rf (xcode-select -print-path) ; xcode-select --install'
+  alias launchpad 'defaults write com.apple.dock ResetLaunchPad -bool true ; killall Dock'
 end
 
 # ubuntu
@@ -238,6 +240,10 @@ if test -d ~/.cargo
 end
 
 # devbox
-if command -sq devbox
-  devbox completion fish | source
+# $ devbox completion fish > ~/.config/fish/completions/devbox.fish
+
+# pipx
+# $ register-python-argcomplete --shell fish pipx > ~/.config/fish/completions/pipx.fish
+if test -d ~/.local/pipx
+  set PATH $PATH ~/.local/bin
 end
