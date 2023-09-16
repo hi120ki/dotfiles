@@ -17,110 +17,110 @@ set -g theme_display_date no
 set -g theme_color_scheme dracula
 
 if test -d /opt/homebrew/bin
-  if status is-interactive
-    eval (/opt/homebrew/bin/brew shellenv)
-  end
+    if status is-interactive
+        eval (/opt/homebrew/bin/brew shellenv)
+    end
 end
 
 # ======================================================================== #
 # Customized command
 # ======================================================================== #
 
-# brew install exa bat ripgrep fd
-# cargo install exa ; cargo install bat ; cargo install ripgrep ; cargo install fd-find
+# brew install eza bat ripgrep fd
+# cargo install eza ; cargo install bat ; cargo install ripgrep ; cargo install fd-find
 
 # brew install fzf
 # sudo apt-get install fzf
 
 function cd
-  builtin cd $argv
-  ls
+    builtin cd $argv
+    ls
 end
 
-# https://github.com/ogham/exa
-if command -sq exa
-  alias ls 'exa -lg --octal-permissions --time-style long-iso --icons'
-  alias l 'exa -lg --octal-permissions --time-style long-iso --icons'
-  alias la 'exa -lag --octal-permissions --time-style long-iso --icons'
-  function lt
-    if count $argv > /dev/null
-      exa -lT --git --git-ignore --octal-permissions --time-style=long-iso --icons -L=$argv
-    else
-      exa -lT --git --git-ignore --octal-permissions --time-style=long-iso --icons -L=2
+# https://github.com/eza-community/eza
+if command -sq eza
+    alias ls 'eza -lg --octal-permissions --time-style long-iso --icons'
+    alias l 'eza -lg --octal-permissions --time-style long-iso --icons'
+    alias la 'eza -lag --octal-permissions --time-style long-iso --icons'
+    function lt
+        if count $argv >/dev/null
+            eza -lT --git --git-ignore --octal-permissions --time-style=long-iso --icons -L=$argv
+        else
+            eza -lT --git --git-ignore --octal-permissions --time-style=long-iso --icons -L=2
+        end
     end
-  end
 else
-  alias l 'ls'
-  alias la 'ls -ahl'
+    alias l ls
+    alias la 'ls -ahl'
 end
 
 # https://github.com/sharkdp/bat
 if command -sq bat
-  # bat --list-themes
-  alias c 'bat --theme="OneHalfDark"'
+    # bat --list-themes
+    alias c 'bat --theme="OneHalfDark"'
 else
-  alias c 'cat'
+    alias c cat
 end
 
 # https://github.com/BurntSushi/ripgrep
 if command -sq rg
-  alias gr 'rg'
-  alias grl 'rg -l'
+    alias gr rg
+    alias grl 'rg -l'
 end
 
 # https://github.com/sharkdp/fd
 if command -sq fd
-  alias f 'fd'
-  alias rmds 'fd -IH ".DS_Store" | xargs rm'
-  alias cleanc 'fd -e c -e h -e cpp -x clang-format -i'
-  alias cleanmd 'fd -e md -x xargs prettier --write'
-  alias cleanjson 'fd -e json -x prettier --no-config -w'
-  alias cleanyml 'fd -e yml -e yaml -x prettier --no-config -w'
-  alias cleanpy 'black .'
-  alias cleansh 'fd -e sh -x xargs shfmt -i 2 -w'
-  alias cleancss "fd -e css -E '*min.css' -x prettier --no-config -w"
-  alias cleanjs "fd -e js -E '*min.js' -x prettier --no-config -w"
-  alias cleants 'fd -e ts -e tsx | xargs prettier --write'
-  alias cleanhtml 'fd ".*.html" -E ".*min.html" | xargs js-beautify -I -r -n -s 2 --no-preserve-newlines'
+    alias f fd
+    alias rmds 'fd -IH ".DS_Store" | xargs rm'
+    alias cleanc 'fd -e c -e h -e cpp -x clang-format -i'
+    alias cleanmd 'fd -e md -x xargs prettier --write'
+    alias cleanjson 'fd -e json -x prettier --no-config -w'
+    alias cleanyml 'fd -e yml -e yaml -x prettier --no-config -w'
+    alias cleanpy 'black .'
+    alias cleansh 'fd -e sh -x xargs shfmt -i 2 -w'
+    alias cleancss "fd -e css -E '*min.css' -x prettier --no-config -w"
+    alias cleanjs "fd -e js -E '*min.js' -x prettier --no-config -w"
+    alias cleants 'fd -e ts -e tsx | xargs prettier --write'
+    alias cleanhtml 'fd ".*.html" -E ".*min.html" | xargs js-beautify -I -r -n -s 2 --no-preserve-newlines'
 end
 
 # https://github.com/junegunn/fzf
 # $ brew install fzf ; /usr/local/opt/fzf/install
 if command -sq fzf
-  set -Ux FZF_CTRL_T_COMMAND 'fd --type f --hidden --follow --exclude .git'
-  set -Ux FZF_CTRL_T_OPTS '--preview "bat --color=always --style=header,grid --line-range :100 {}"'
+    set -Ux FZF_CTRL_T_COMMAND 'fd --type f --hidden --follow --exclude .git'
+    set -Ux FZF_CTRL_T_OPTS '--preview "bat --color=always --style=header,grid --line-range :100 {}"'
 
-  alias gcd 'cd (ghq root)/(ghq list | fzf --border)'
-  alias gco 'code (ghq root)/(ghq list | fzf --border)'
-  alias gop 'open (ghq root)/(ghq list | fzf --border)'
-  alias fcd 'cd (/bin/ls | fzf --border)'
+    alias gcd 'cd (ghq root)/(ghq list | fzf --border)'
+    alias gco 'code (ghq root)/(ghq list | fzf --border)'
+    alias gop 'open (ghq root)/(ghq list | fzf --border)'
+    alias fcd 'cd (/bin/ls | fzf --border)'
 
-  # https://github.com/junegunn/fzf/wiki/Examples-(fish)
-  function fco -d "Use `fzf` to choose which branch to check out" --argument-names branch
-    set -q branch[1]; or set branch ''
-    git for-each-ref --format='%(refname:short)' refs/heads | fzf --border --reverse --query=$branch --select-1 | xargs git checkout
-  end
+    # https://github.com/junegunn/fzf/wiki/Examples-(fish)
+    function fco -d "Use `fzf` to choose which branch to check out" --argument-names branch
+        set -q branch[1]; or set branch ''
+        git for-each-ref --format='%(refname:short)' refs/heads | fzf --border --reverse --query=$branch --select-1 | xargs git checkout
+    end
 
-  # fzf ssh
-  # brew install the_silver_searcher
-  # sudo apt-get install silversearcher-ag
-  function fssh -d "Fuzzy-find ssh host via ag and ssh into it"
-    ag --ignore-case '^host [^*]' ~/.ssh/config* | cut -d ' ' -f 2 | fzf --border --reverse | read -l result; and ssh "$result"
-  end
+    # fzf ssh
+    # brew install the_silver_searcher
+    # sudo apt-get install silversearcher-ag
+    function fssh -d "Fuzzy-find ssh host via ag and ssh into it"
+        ag --ignore-case '^host [^*]' ~/.ssh/config* | cut -d ' ' -f 2 | fzf --border --reverse | read -l result; and ssh "$result"
+    end
 end
 
 # https://github.com/Gallopsled/pwntools
 function exploit
-  pwn template --host $argv[1] --port $argv[2] $argv[3] > exploit.py | black exploit.py
+    pwn template --host $argv[1] --port $argv[2] $argv[3] >exploit.py | black exploit.py
 end
 
 # https://formulae.brew.sh/formula/gnu-sed
 if command -sq gsed
-  alias sed 'gsed'
+    alias sed gsed
 end
 
 function rmspace
-  rename 's/ /_/g' $argv[1]
+    rename 's/ /_/g' $argv[1]
 end
 
 # ======================================================================== #
@@ -135,10 +135,10 @@ alias pj 'cd ~/Project'
 alias gh 'cd ~/src/github.com/hi120ki'
 
 alias rmr 'rm -rf'
-alias cl 'clear'
+alias cl clear
 alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
-alias ghidra '~/ghidra/10.2.3/ghidraRun'
+alias ghidra '~/ghidra/10.3.2/ghidraRun'
 alias sha256 'shasum -a 256'
 
 # Python
@@ -162,15 +162,15 @@ alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
 alias nup 'npm i -g npm yarn ; npm update -g ; yarn global upgrade ; npm cache verify ; yarn cache clean'
 
 # Git
-alias g 'git'
+alias g git
 alias gl 'git pull'
 alias ga 'git add --all'
 alias gc 'git commit -m'
 alias gp 'git push origin (git_current_branch)'
-alias commit 'git add . ; git commit -m "commit" ; git push origin main'
+alias commit '/Users/mac/src/github.com/hi120ki/aicommit/run.sh'
 
 # Docker
-alias d 'docker'
+alias d docker
 alias dps 'docker ps'
 alias dpsa 'docker ps -a'
 alias dsa 'docker start'
@@ -184,17 +184,17 @@ alias dvp 'docker volume prune -f'
 alias dockercleanall 'docker ps --format "{{.Names}}" | xargs docker stop ; docker ps -a --format "{{.Names}}" | xargs docker rm ; docker images --format "{{.Repository}}:{{.Tag}}" | xargs docker rmi ; docker network prune -f ; docker volume prune -f ; docker builder prune -f ; docker system prune -f'
 
 # Docker Compose
-alias dc 'docker-compose'
-alias dcb 'docker-compose pull ; docker-compose build --pull'
-alias dcu 'docker-compose up'
-alias dcup 'docker-compose up -d'
-alias dcso 'docker-compose stop'
-alias dcrm 'docker-compose rm -f'
-alias dcps 'docker-compose ps'
-alias dcex 'docker-compose exec'
+alias dc 'docker compose'
+alias dcb 'docker compose pull ; docker compose build --pull'
+alias dcu 'docker compose up'
+alias dcup 'docker compose up -d'
+alias dcso 'docker compose stop'
+alias dcrm 'docker compose rm -f'
+alias dcps 'docker compose ps'
+alias dcex 'docker compose exec'
 
 # Vagrant
-alias v 'vagrant'
+alias v vagrant
 alias vup 'vagrant up'
 alias vssh 'vagrant ssh'
 alias vstat 'vagrant status'
@@ -203,7 +203,7 @@ alias vhalt 'vagrant halt'
 alias vrelo 'vagrant reload'
 
 # Vbox
-alias vb 'vboxmanage'
+alias vb vboxmanage
 alias vbs 'vboxmanage list runningvms'
 alias vbsa 'vboxmanage list vms'
 alias vbc 'VBoxManage list vms | grep inaccessible | cut -d "{" -f2 | cut -d "}" -f1 | xargs -L1 VBoxManage unregistervm'
@@ -214,36 +214,37 @@ alias vbc 'VBoxManage list vms | grep inaccessible | cut -d "{" -f2 | cut -d "}"
 
 # macOS
 if command -sq sw_vers
-  alias up 'brew upgrade ; brew upgrade --cask ; anyenv update'
-  alias xcodeselect 'sudo rm -rf (xcode-select -print-path) ; xcode-select --install'
-  alias launchpad 'defaults write com.apple.dock ResetLaunchPad -bool true ; killall Dock'
+    alias up 'brew upgrade ; brew upgrade --cask ; anyenv update'
+    alias xcodeselect 'sudo rm -rf (xcode-select -print-path) ; xcode-select --install'
+    alias launchpad 'defaults write com.apple.dock ResetLaunchPad -bool true ; killall Dock'
 end
 
 # ubuntu
 if command -sq lsb_release
-  alias up 'sudo apt update ; sudo apt upgrade -y'
+    alias up 'sudo apt update ; sudo apt upgrade -y'
 end
 
 # ======================================================================== #
 # Path
 # ======================================================================== #
 
-# anyenv
-if test -d ~/.anyenv
-  set -x PATH ~/.anyenv/bin $PATH
-  anyenv init - | source
-end
-
 # rust
+# $ rustup update
 if test -d ~/.cargo
-  set -x PATH ~/.cargo/bin $PATH
+    set -x PATH ~/.cargo/bin $PATH
 end
 
 # devbox
+# $ devbox version update
 # $ devbox completion fish > ~/.config/fish/completions/devbox.fish
 
-# pipx
-# $ register-python-argcomplete --shell fish pipx > ~/.config/fish/completions/pipx.fish
-if test -d ~/.local/pipx
-  set PATH $PATH ~/.local/bin
+# rye
+# $ rye self update
+# $ rye self completion --shell fish > ~/.config/fish/completions/rye.fish
+if test -d ~/.rye
+    set PATH $PATH ~/.rye/shims
 end
+
+set PATH $PATH /opt/homebrew/opt/mysql-client/bin
+
+alias envupdate 'rustup update ; devbox version update ; devbox completion fish > ~/.config/fish/completions/devbox.fish ; rye self update ; rye self completion --shell fish > ~/.config/fish/completions/rye.fish'
