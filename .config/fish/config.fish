@@ -123,6 +123,31 @@ function rmspace
     rename 's/ /_/g' $argv[1]
 end
 
+function update
+    # macOS
+    if command -sq sw_vers
+        brew upgrade
+    end
+    # ubuntu
+    if command -sq lsb_release
+        sudo apt update && sudo apt upgrade -y
+    end
+    if test -d ~/.anyenv
+        anyenv update
+    end
+    if test -d ~/.cargo
+        rustup update
+    end
+    if test -d ~/.rye
+        rye self update
+        rye self completion --shell fish > ~/.config/fish/completions/rye.fish
+    end
+    if command -sq devbox
+        devbox version update
+        devbox completion fish > ~/.config/fish/completions/devbox.fish
+    end
+end
+
 # ======================================================================== #
 # Shorthand command
 # ======================================================================== #
@@ -140,13 +165,14 @@ alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
 alias ghidra '~/ghidra/10.3.2/ghidraRun'
 alias sha256 'shasum -a 256'
+alias ghqpull 'ghq list | ghq get --update --parallel'
 
 # Python
-alias pipinit 'pip install -U pip ; pip install -U pipdeptree black pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit'
-alias pipreq 'pip install -r requirements.txt'
-alias venv 'source .venv/bin/activate.fish'
-alias venvinit 'rm -rf .venv ; python -m venv .venv'
-alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
+# alias pipinit 'pip install -U pip ; pip install -U pipdeptree black pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit'
+# alias pipreq 'pip install -r requirements.txt'
+# alias venv 'source .venv/bin/activate.fish'
+# alias venvinit 'rm -rf .venv ; python -m venv .venv'
+# alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
 
 # pipx
 # sudo apt install -y libffi-dev libbz2-dev libreadline-dev libsqlite3-dev
@@ -159,7 +185,7 @@ alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
 
 # Node.js
 # npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
-alias nup 'npm i -g npm yarn ; npm update -g ; yarn global upgrade ; npm cache verify ; yarn cache clean'
+# alias nup 'npm i -g npm yarn ; npm update -g ; yarn global upgrade ; npm cache verify ; yarn cache clean'
 
 # Git
 alias g git
@@ -214,14 +240,8 @@ alias vbc 'VBoxManage list vms | grep inaccessible | cut -d "{" -f2 | cut -d "}"
 
 # macOS
 if command -sq sw_vers
-    alias up 'brew upgrade ; brew upgrade --cask ; anyenv update'
     alias xcodeselect 'sudo rm -rf (xcode-select -print-path) ; xcode-select --install'
     alias launchpad 'defaults write com.apple.dock ResetLaunchPad -bool true ; killall Dock'
-end
-
-# ubuntu
-if command -sq lsb_release
-    alias up 'sudo apt update ; sudo apt upgrade -y'
 end
 
 # ======================================================================== #
@@ -229,22 +249,17 @@ end
 # ======================================================================== #
 
 # rust
-# $ rustup update
 if test -d ~/.cargo
     set -x PATH ~/.cargo/bin $PATH
 end
 
-# devbox
-# $ devbox version update
-# $ devbox completion fish > ~/.config/fish/completions/devbox.fish
-
 # rye
-# $ rye self update
-# $ rye self completion --shell fish > ~/.config/fish/completions/rye.fish
 if test -d ~/.rye
     set PATH $PATH ~/.rye/shims
 end
 
 set PATH $PATH /opt/homebrew/opt/mysql-client/bin
 
-alias envupdate 'rustup update ; devbox version update ; devbox completion fish > ~/.config/fish/completions/devbox.fish ; rye self update ; rye self completion --shell fish > ~/.config/fish/completions/rye.fish'
+# ======================================================================== #
+# etc
+# ======================================================================== #
