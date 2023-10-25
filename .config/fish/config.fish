@@ -146,6 +146,25 @@ function update
         devbox version update
         devbox completion fish > ~/.config/fish/completions/devbox.fish
     end
+    if command -sq npm
+        npm i -g npm yarn
+        npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
+        npm update -g
+        npm cache verify
+        npm list -g --depth=0
+    end
+    if command -sq yarn
+        yarn global upgrade
+        yarn cache clean
+        yarn global list --depth=0
+    end
+    if command -sq pip
+        pip install -U pip
+        pip install -U pipdeptree black isort pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit
+    end
+    if command -sq ghq
+        ghq list | ghq get --update --parallel
+    end
 end
 
 # ======================================================================== #
@@ -165,27 +184,6 @@ alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
 alias ghidra '~/ghidra/10.3.2/ghidraRun'
 alias sha256 'shasum -a 256'
-alias ghqpull 'ghq list | ghq get --update --parallel'
-
-# Python
-# alias pipinit 'pip install -U pip ; pip install -U pipdeptree black pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit'
-# alias pipreq 'pip install -r requirements.txt'
-# alias venv 'source .venv/bin/activate.fish'
-# alias venvinit 'rm -rf .venv ; python -m venv .venv'
-# alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
-
-# pipx
-# sudo apt install -y libffi-dev libbz2-dev libreadline-dev libsqlite3-dev
-# pyenv install 3.10.10 ; pyenv global 3.10.10
-# pip install -U pipx
-# ~/.local/bin/pipx ensurepath
-# pipx install online-judge-tools ; pipx install black ; pipx install isort ; pipx install jupyterlab ; pipx install ansible --include-deps ; pipx install ansible-lint ; pipx inject ansible-lint ansible
-# pipx upgrade-all
-# pipx list
-
-# Node.js
-# npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
-# alias nup 'npm i -g npm yarn ; npm update -g ; yarn global upgrade ; npm cache verify ; yarn cache clean'
 
 # Git
 alias g git
