@@ -163,7 +163,7 @@ function update
         pip install -U pipdeptree black isort pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit
     end
     if command -sq ghq
-        ghq list | ghq get --update --parallel
+        ghq list | grep github.com | ghq get --update --parallel
     end
 end
 
@@ -182,7 +182,7 @@ alias rmr 'rm -rf'
 alias cl clear
 alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
-alias ghidra '~/ghidra/10.3.2/ghidraRun'
+alias ghidra '~/ghidra/10.4/ghidraRun'
 alias sha256 'shasum -a 256'
 
 # Git
@@ -191,7 +191,6 @@ alias gl 'git pull'
 alias ga 'git add --all'
 alias gc 'git commit -m'
 alias gp 'git push origin (git_current_branch)'
-alias commit '/Users/mac/src/github.com/hi120ki/aicommit/run.sh'
 
 # Docker
 alias d docker
