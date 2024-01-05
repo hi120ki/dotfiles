@@ -218,20 +218,11 @@ alias dcrm 'docker compose rm -f'
 alias dcps 'docker compose ps'
 alias dcex 'docker compose exec'
 
-# Vagrant
-alias v vagrant
-alias vup 'vagrant up'
-alias vssh 'vagrant ssh'
-alias vstat 'vagrant status'
-alias vdest 'vagrant destroy -f'
-alias vhalt 'vagrant halt'
-alias vrelo 'vagrant reload'
-
-# Vbox
-alias vb vboxmanage
-alias vbs 'vboxmanage list runningvms'
-alias vbsa 'vboxmanage list vms'
-alias vbc 'VBoxManage list vms | grep inaccessible | cut -d "{" -f2 | cut -d "}" -f1 | xargs -L1 VBoxManage unregistervm'
+# Python
+alias pipreq 'pip install -r requirements.txt'
+alias venv 'source .venv/bin/activate.fish'
+alias venvinit 'rm -rf .venv ; python -m venv .venv'
+alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
 
 # ======================================================================== #
 # OS command
@@ -266,3 +257,7 @@ end
 if test -d /opt/homebrew/opt/mysql-client
     set PATH $PATH /opt/homebrew/opt/mysql-client/bin
 end
+
+# ======================================================================== #
+# etc
+# ======================================================================== #
