@@ -132,10 +132,12 @@ function update
     if command -sq lsb_release
         sudo apt update && sudo apt upgrade -y
     end
-    if test -d ~/.anyenv
-        anyenv update
+    if command -sq mise
+        mise self-update
+        mise upgrade
     end
     if test -d ~/.cargo
+        rustup self update
         rustup update
     end
     if test -d ~/.rye
@@ -182,7 +184,7 @@ alias rmr 'rm -rf'
 alias cl clear
 alias fishrc 'code ~/.config/fish/config.fish'
 alias ncf 'nano ~/.config/fish/config.fish'
-alias ghidra '~/ghidra/10.4/ghidraRun'
+alias ghidra '~/ghidra/11.0/ghidraRun'
 alias sha256 'shasum -a 256'
 
 # Git
@@ -245,6 +247,11 @@ end
 # Path
 # ======================================================================== #
 
+# mise
+if test -f ~/.local/bin/mise
+    ~/.local/bin/mise activate fish | source
+end
+
 # rust
 if test -d ~/.cargo
     set -x PATH ~/.cargo/bin $PATH
@@ -255,8 +262,7 @@ if test -d ~/.rye
     set PATH $PATH ~/.rye/shims
 end
 
-set PATH $PATH /opt/homebrew/opt/mysql-client/bin
-
-# ======================================================================== #
-# etc
-# ======================================================================== #
+# MySQL client
+if test -d /opt/homebrew/opt/mysql-client
+    set PATH $PATH /opt/homebrew/opt/mysql-client/bin
+end
