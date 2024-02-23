@@ -195,8 +195,8 @@ alias g git
 alias gl 'git pull'
 alias ga 'git add --all'
 alias gc 'git commit -m'
-alias gp 'git push origin main'
-alias fix 'git add . ; git commit -m "fix" ; git push origin main'
+alias gp 'git push -u origin main'
+alias fix 'git add . ; git commit -m "fix" ; git push -u origin main'
 
 # Docker
 alias d docker
