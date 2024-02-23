@@ -133,8 +133,8 @@ function update
         sudo apt update && sudo apt upgrade -y
     end
     if command -sq mise
-        mise self-update
-        mise upgrade
+        mise self-update -y
+        mise upgrade -y
     end
     if test -d ~/.cargo
         rustup self update
@@ -148,26 +148,29 @@ function update
         devbox version update
         devbox completion fish > ~/.config/fish/completions/devbox.fish
     end
-    if command -sq npm
-        npm i -g npm yarn
-        npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
-        npm update -g
-        npm cache verify
-        npm list -g --depth=0
-    end
-    if command -sq yarn
-        yarn global upgrade
-        yarn cache clean
-        yarn global list --depth=0
-    end
-    if command -sq pip
-        pip install -U pip
-        pip install -U pipdeptree black isort pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit
-    end
+    # if command -sq npm
+    #     npm i -g npm yarn
+    #     npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
+    #     npm update -g
+    #     npm cache verify
+    #     npm list -g --depth=0
+    # end
+    # if command -sq yarn
+    #     yarn global upgrade
+    #     yarn cache clean
+    #     yarn global list --depth=0
+    # end
+    # if command -sq pip
+    #     pip install -U pip
+    #     pip install -U pipdeptree black isort pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit
+    # end
     if command -sq ghq
         ghq list | grep github.com | ghq get --update --parallel
     end
 end
+
+alias nup 'npm i -g npm yarn ; npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk'
+alias pipup 'pip install -U pip ; pip install -U pipdeptree black isort pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit'
 
 # ======================================================================== #
 # Shorthand command
@@ -193,6 +196,7 @@ alias gl 'git pull'
 alias ga 'git add --all'
 alias gc 'git commit -m'
 alias gp 'git push origin (git_current_branch)'
+alias fix 'git add . ; git commit -m "fix" ; git push origin (git_current_branch)'
 
 # Docker
 alias d docker
@@ -251,6 +255,11 @@ end
 # rye
 if test -d ~/.rye
     set PATH $PATH ~/.rye/shims
+end
+
+# zoxide
+if command -sq zoxide
+    zoxide init fish | source
 end
 
 # MySQL client
