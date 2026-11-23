@@ -82,3 +82,5 @@ touch "$HOME/.hushlogin"
 killall Dock || true
 killall Finder || true
 killall SystemUIServer || true
+
+echo "[done] macOS defaults applied. Some settings (e.g. trackpad/scroll) may require logging out and back in."
