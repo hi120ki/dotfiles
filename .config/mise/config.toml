@@ -1,0 +1,15 @@
+[tools]
+go = "latest"
+node = "24"
+python = "3.14"
+java = "openjdk-25"
+ruby = "3.4"
+# npm packages
+"npm:@openai/codex" = { version = "latest", minimum_release_age = "0s" }
+"npm:npm-check-updates" = "latest"
+"npm:prettier" = "latest"
+"npm:yarn" = "latest"
+"npm:pnpm" = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["python"]
