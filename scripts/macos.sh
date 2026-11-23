@@ -43,14 +43,20 @@ defaults write com.apple.WindowManager GloballyEnabled -bool false
 
 echo "[i] Finder Settings"
 defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
 defaults write com.apple.finder ShowTabView -bool true
 defaults write com.apple.finder AppleShowAllFiles -string "TRUE"
 defaults write com.apple.finder NewWindowTarget -string "PfHm"
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 defaults write com.apple.finder FXPreferredSearchViewStyle -string "Nlsv"
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 chflags nohidden "$HOME/Library"
 
