@@ -14,6 +14,7 @@ fi
 echo "[i] Dock Settings"
 defaults write com.apple.dock springboard-columns -int 12
 defaults write com.apple.dock tilesize -int 30
+defaults write com.apple.dock size-immutable -bool true
 defaults write com.apple.dock magnification -bool true
 defaults write com.apple.dock largesize -int 85
 defaults write com.apple.dock orientation -string "left"
@@ -84,12 +85,16 @@ defaults write NSGlobalDomain com.apple.trackpad.scaling -float 2.0
 defaults write NSGlobalDomain com.apple.mouse.scaling -float 1.0
 
 echo "[i] UI & Menu Bar Settings"
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 2
 defaults write NSGlobalDomain AppleMiniaturizeOnDoubleClick -bool false
 defaults -currentHost write com.apple.controlcenter Sound -int 18
 defaults -currentHost write com.apple.controlcenter Bluetooth -int 8
 defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -bool false
 defaults write com.apple.menuextra.clock ShowDayOfWeek -bool true
 defaults write com.apple.menuextra.clock ShowAMPM -bool true
+
+echo "[i] Screenshot Settings"
+defaults write com.apple.screencapture name -string "screenshot"
 
 echo "[i] Activity Monitor Settings"
 # Show CPU usage in Dock icon
@@ -98,8 +103,9 @@ defaults write com.apple.ActivityMonitor IconType -int 5
 echo "[i] Hide terminal login message"
 touch "$HOME/.hushlogin"
 
-echo "[i] Restarting Finder & Dock"
+echo "[i] Restarting Finder, Dock & SystemUIServer"
 killall Finder || true
 killall Dock || true
+killall SystemUIServer || true
 
 echo "[done] macOS defaults applied. Some settings (e.g. trackpad/scroll) may require logging out and back in."
