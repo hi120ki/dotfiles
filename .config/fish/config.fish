@@ -5,7 +5,7 @@
 # https://github.com/fish-shell/fish-shell
 # https://github.com/jorgebucaran/fisher
 
-# fisher install oh-my-fish/theme-bobthefish edc/bass jethrokuan/z
+# fisher update (configured via ~/.config/fish/fish_plugins)
 
 function fish_greeting
 end
@@ -26,11 +26,7 @@ end
 # Customized command
 # ======================================================================== #
 
-# brew install eza bat ripgrep fd
-# cargo install eza ; cargo install bat ; cargo install ripgrep ; cargo install fd-find
-
-# brew install fzf
-# sudo apt-get install fzf
+# brew install eza bat ripgrep fd fzf zoxide
 
 function cd
     builtin cd $argv
@@ -72,20 +68,16 @@ end
 if command -sq fd
     alias f fd
     alias rmds 'fd -IH ".DS_Store" | xargs rm'
-    alias cleanc 'fd -e c -e h -e cpp -x clang-format -i'
     alias cleanmd 'fd -e md -x xargs prettier --write'
     alias cleanjson 'fd -e json -x prettier --no-config -w'
     alias cleanyml 'fd -e yml -e yaml -x prettier --no-config -w'
-    alias cleanpy 'black .'
     alias cleansh 'fd -e sh -x xargs shfmt -i 2 -w'
     alias cleancss "fd -e css -E '*min.css' -x prettier --no-config -w"
     alias cleanjs "fd -e js -E '*min.js' -x prettier --no-config -w"
     alias cleants 'fd -e ts -e tsx | xargs prettier --write'
-    alias cleanhtml 'fd ".*.html" -E ".*min.html" | xargs js-beautify -I -r -n -s 2 --no-preserve-newlines'
 end
 
 # https://github.com/junegunn/fzf
-# $ brew install fzf ; /usr/local/opt/fzf/install
 if command -sq fzf
     set -Ux FZF_CTRL_T_COMMAND 'fd --type f --hidden --follow --exclude .git'
     set -Ux FZF_CTRL_T_OPTS '--preview "bat --color=always --style=header,grid --line-range :100 {}"'
@@ -94,6 +86,7 @@ if command -sq fzf
     alias gco 'code (ghq root)/(ghq list | fzf --border)'
     alias gop 'open (ghq root)/(ghq list | fzf --border)'
     alias fcd 'cd (/bin/ls | fzf --border)'
+    alias github 'open -a "Google Chrome" https://(ghq list | fzf --border)'
 
     # https://github.com/junegunn/fzf/wiki/Examples-(fish)
     function fco -d "Use `fzf` to choose which branch to check out" --argument-names branch
@@ -102,16 +95,16 @@ if command -sq fzf
     end
 
     # fzf ssh
-    # brew install the_silver_searcher
-    # sudo apt-get install silversearcher-ag
-    function fssh -d "Fuzzy-find ssh host via ag and ssh into it"
-        ag --ignore-case '^host [^*]' ~/.ssh/config* | cut -d ' ' -f 2 | fzf --border --reverse | read -l result; and ssh "$result"
+    function fssh -d "Fuzzy-find ssh host via rg and ssh into it"
+        rg --ignore-case --no-filename '^host [^*]' ~/.ssh/config* | cut -d ' ' -f 2 | fzf --border --reverse | read -l result; and ssh "$result"
     end
-end
 
-# https://github.com/Gallopsled/pwntools
-function exploit
-    pwn template --host $argv[1] --port $argv[2] $argv[3] >exploit.py | black exploit.py
+    function cleanbranch -d "Delete local branches except main/master/development across ghq repos"
+        for repo in (ghq list)
+            builtin cd (ghq root)/$repo
+            git branch | grep -Ev "master|main|development" | xargs git branch -D
+        end
+    end
 end
 
 # https://formulae.brew.sh/formula/gnu-sed
@@ -135,42 +128,18 @@ function update
     if command -sq mise
         mise self-update -y
         mise upgrade -y
+        mise ls --prunable
     end
-    if test -d ~/.cargo
+    if test -d "$HOME/.cargo"
         rustup self update
         rustup update
     end
-    if test -d ~/.rye
-        rye self update
-        rye self completion --shell fish > ~/.config/fish/completions/rye.fish
-    end
-    if command -sq devbox
-        devbox version update
-        devbox completion fish > ~/.config/fish/completions/devbox.fish
-    end
-    # if command -sq npm
-    #     npm i -g npm yarn
-    #     npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk
-    #     npm update -g
-    #     npm cache verify
-    #     npm list -g --depth=0
-    # end
-    # if command -sq yarn
-    #     yarn global upgrade
-    #     yarn cache clean
-    #     yarn global list --depth=0
-    # end
-    # if command -sq pip
-    #     pip install -U pip
-    #     pip install -U pipdeptree black isort pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit
-    # end
     if command -sq ghq
         ghq list | grep github.com | ghq get --update --parallel
     end
 end
 
-alias nup 'npm i -g npm yarn ; npm i -g npm-check-updates prettier prettier-plugin-java @prettier/plugin-php @prettier/plugin-ruby fast-cli aws-cdk'
-alias pipup 'pip install -U pip ; pip install -U pipdeptree black isort pycryptodome requests numpy sympy scipy gmpy2 matplotlib bandit'
+alias clearcache 'brew cleanup ; mise cache clear ; mise cache prune ; uv cache prune'
 
 # ======================================================================== #
 # Shorthand command
@@ -180,14 +149,10 @@ alias ] 'cd ../'
 alias de 'cd ~/Desktop'
 alias dl 'cd ~/Downloads'
 alias do 'cd ~/Documents'
-alias pj 'cd ~/Project'
-alias gh 'cd ~/src/github.com/hi120ki'
 
 alias rmr 'rm -rf'
 alias cl clear
 alias fishrc 'code ~/.config/fish/config.fish'
-alias ncf 'nano ~/.config/fish/config.fish'
-alias ghidra '~/ghidra/11.0/ghidraRun'
 alias sha256 'shasum -a 256'
 
 # Git
@@ -223,10 +188,7 @@ alias dcps 'docker compose ps'
 alias dcex 'docker compose exec'
 
 # Python
-alias pipreq 'pip install -r requirements.txt'
 alias venv 'source .venv/bin/activate.fish'
-alias venvinit 'rm -rf .venv ; python -m venv .venv'
-alias venvsetup 'venvinit ; venv ; pip install -U pip ; pipreq'
 
 # ======================================================================== #
 # OS command
@@ -239,22 +201,27 @@ if command -sq sw_vers
 end
 
 # ======================================================================== #
-# Path
+# Path & Tools
 # ======================================================================== #
 
+# local bin
+if test -d "$HOME/.local/bin"
+    fish_add_path "$HOME/.local/bin"
+end
+
+# Docker Desktop
+if test -d "$HOME/.docker/bin"
+    fish_add_path "$HOME/.docker/bin"
+end
+
 # mise
-if test -f ~/.local/bin/mise
-    ~/.local/bin/mise activate fish | source
+if test -f "$HOME/.local/bin/mise"
+    "$HOME/.local/bin/mise" activate fish | source
 end
 
 # rust
-if test -d ~/.cargo
-    set -x PATH ~/.cargo/bin $PATH
-end
-
-# rye
-if test -d ~/.rye
-    set PATH $PATH ~/.rye/shims
+if test -d "$HOME/.cargo/bin"
+    fish_add_path "$HOME/.cargo/bin"
 end
 
 # zoxide
@@ -262,11 +229,18 @@ if command -sq zoxide
     zoxide init fish | source
 end
 
-# MySQL client
-if test -d /opt/homebrew/opt/mysql-client
-    set PATH $PATH /opt/homebrew/opt/mysql-client/bin
+# kubectl
+if test -f "$HOME/.kubectl_aliases.fish"
+    source "$HOME/.kubectl_aliases.fish"
 end
 
-# ======================================================================== #
-# etc
-# ======================================================================== #
+# Google Cloud SDK
+if test -f "$HOME/google-cloud-sdk/path.fish.inc"
+    source "$HOME/google-cloud-sdk/path.fish.inc"
+end
+
+# Secretive (SSH agent)
+set -l secretive_sock "$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
+if test -S "$secretive_sock"
+    set -gx SSH_AUTH_SOCK "$secretive_sock"
+end
